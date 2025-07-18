@@ -1,0 +1,16 @@
+services:
+  config-server:
+    container_name: config-server
+    build:
+      context: ./services/config-server
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - network
+    depends_on:
+      - eureka-server
+
+networks:
+  network:
+    driver: bridge
