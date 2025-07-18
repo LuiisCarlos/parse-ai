@@ -9,7 +9,7 @@
 #
 #!/bin/bash
 
-.PHONY: start stop down restart build console deploy list
+.PHONY: start stop down restart build
 
 start:
 	docker-compose up -d --build

@@ -1,5 +1,10 @@
 services:
   config-server:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     container_name: config-server
     build:
       context: ./services/config-server
@@ -7,10 +12,26 @@ services:
     ports:
       - "8888:8888"
     networks:
-      - network
+      - net
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  eureka-server:
+    container_name: eureka-server
+    build:
+      context: ./services/eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - net
     depends_on:
-      - eureka-server
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_APPLICATION_NAME=eureka-server
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
 
 networks:
-  network:
+  net:
     driver: bridge
