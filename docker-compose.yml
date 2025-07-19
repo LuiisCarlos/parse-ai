@@ -13,6 +13,7 @@ services:
       - "8888:8888"
     networks:
       - net
+
   eureka-server:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
@@ -34,10 +35,10 @@ services:
       - SPRING_APPLICATION_NAME=eureka-server
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
 
-  document-service:
-    container_name: document-service
+  gateway-service:
+    container_name: gateway-service
     build:
-      context: ./services/document-service
+      context: ./services/gateway-service
       dockerfile: Dockerfile
     ports:
       - "8090:8090"
@@ -49,9 +50,62 @@ services:
       config-server:
         condition: service_healthy
     environment:
-      - SPRING_APPLICATION_NAME=document-service
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka"}}}}}
+
+  document-service:
+    container_name: document-service
+    build:
+      context: ./services/document-service
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
+    networks:
+      - net
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka"}}}}}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-database:5432/parse_ai_db
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+
+  storage-service:
+    container_name: storage-service
+    build:
+      context: ./services/storage-service
+      dockerfile: Dockerfile
+    ports:
+      - "8092:8092"
+    networks:
+      - net
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka"}}}}}
+      - CLOUDINARY_NAME=${CLOUDINARY_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+
+  postgres-database:
+    container_name: postgres-database
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: parse_ai_db
+    ports:
+      - "5432:5432"
+    networks:
+      - net
 
 networks:
   net:

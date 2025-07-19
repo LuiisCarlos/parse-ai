@@ -1,13 +1,12 @@
-package dev.luisworks.document_service;
+package dev.luisworks.parse_ai;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DocumentServiceApplicationTests {
+class StorageServiceApplicationTests {
 
 	@Test
-	void contextLoads() {
-	}
+	void contextLoads() { }
 
 }

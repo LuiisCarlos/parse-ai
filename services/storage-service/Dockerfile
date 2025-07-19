@@ -4,18 +4,9 @@ WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Runtime image
+# Execute the application
 FROM eclipse-temurin:21
 WORKDIR /app
-
-# Install Tesseract OCR
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    tesseract-ocr-eng \
-    tesseract-ocr-spa \
-    && rm -rf /var/lib/apt/lists/*
-
-# Execute the application
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-Xms512M", "-Xmx1G", "-jar", "app.jar"]

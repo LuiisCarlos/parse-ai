@@ -1,25 +1,21 @@
 server:
-  port: 8091
+  port: 8092
 
 spring:
   application:
-    name: document-service
+    name: storage-service
 
   profiles:
     active: docker
 
-  datasource:
-    driverClassName: org.postgresql.Driver
-
 eureka:
   instance:
     preferIpAddress: false
-    hostname: document-service
-    nonSecurePort: 8091
+    hostname: storage-service
+    nonSecurePort: 8092
 
   client:
     registerWithEureka: true
     fetchRegistry: true
-
 
 
