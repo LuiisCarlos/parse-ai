@@ -3,8 +3,8 @@ package dev.luisworks.parse_ai.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import dev.luisworks.parse_ai.shared.util.EnumUtils;
-import dev.luisworks.parse_ai.shared.util.JsonValuedEnum;
+import dev.luisworks.common.util.EnumUtils;
+import dev.luisworks.common.util.JsonValuedEnum;
 
 import lombok.AllArgsConstructor;
 

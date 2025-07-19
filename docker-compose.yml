@@ -7,8 +7,8 @@ services:
       retries: 3
     container_name: config-server
     build:
-      context: ./services/config-server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/config-server/Dockerfile
     ports:
       - "8888:8888"
     networks:
@@ -22,8 +22,8 @@ services:
       retries: 3
     container_name: eureka-server
     build:
-      context: ./services/eureka-server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/eureka-server/Dockerfile
     ports:
       - "8761:8761"
     networks:
@@ -31,15 +31,12 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
-    environment:
-      - SPRING_APPLICATION_NAME=eureka-server
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
 
   gateway-service:
     container_name: gateway-service
     build:
-      context: ./services/gateway-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/gateway-service/Dockerfile
     ports:
       - "8090:8090"
     networks:
@@ -49,15 +46,12 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
-    environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
-      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka"}}}}}
 
   document-service:
     container_name: document-service
     build:
-      context: ./services/document-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/document-service/Dockerfile
     ports:
       - "8091:8091"
     networks:
@@ -68,8 +62,6 @@ services:
       config-server:
         condition: service_healthy
     environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
-      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka"}}}}}
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-database:5432/parse_ai_db
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
@@ -77,8 +69,8 @@ services:
   storage-service:
     container_name: storage-service
     build:
-      context: ./services/storage-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/storage-service/Dockerfile
     ports:
       - "8092:8092"
     networks:
@@ -89,8 +81,6 @@ services:
       config-server:
         condition: service_healthy
     environment:
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
-      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka"}}}}}
       - CLOUDINARY_NAME=${CLOUDINARY_NAME}
       - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
       - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}

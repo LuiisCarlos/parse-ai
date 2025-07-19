@@ -1,21 +1,26 @@
-# Build the application
+# Build stage
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+
+# Copy service source code
+COPY services/document-service/ /app/
+
+# Copy common lib JAR into libs folder inside the build context
+COPY libs/common-lib-1.0.0.jar libs/common-lib-1.0.0.jar
+
+RUN mvn clean package -Pdocker-build -DskipTests
 
 # Runtime image
 FROM eclipse-temurin:21
 WORKDIR /app
 
-# Install Tesseract OCR
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-eng \
     tesseract-ocr-spa \
     && rm -rf /var/lib/apt/lists/*
 
-# Execute the application
 COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8080
+
+EXPOSE 8091
 ENTRYPOINT ["java", "-Xms512M", "-Xmx1G", "-jar", "app.jar"]

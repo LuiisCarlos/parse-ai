@@ -1,4 +1,4 @@
-package dev.luisworks.parse_ai.shared.util;
+package dev.luisworks.common.util;
 
 public class EnumUtils {
 

@@ -113,15 +113,17 @@ Health endpoints are available at:
 
 ```
 .
-├── infrastructure/             # Contains infrastructure-as-code, scripts, and config files
-├── resources/                  # Documentation, diagrams, and other supporting resources
+├── infrastructure/             # Infrastructure-as-code, deployment scripts, and config files
+├── libs/                       # Shared libraries and utilities used across services
+├── resources/                  # Documentation, diagrams, and supporting resources
 ├── services/                   # Source code for each microservice
 │   ├── config-server/          # Centralized configuration management service
-│   ├── document-service/       # Handles document parsing and management
+│   ├── document-service/       # Document parsing and management
 │   ├── eureka-server/          # Service registry for microservices discovery
 │   ├── gateway-service/        # API gateway for routing and security
-│   ├── storage-service/        # Manages file storage using Cloudinary
-│   └── ai-service/             # Provides AI-powered document analysis and processing
+│   ├── storage-service/        # File storage management using Cloudinary
+│   └── ai-service/             # AI-powered document analysis and processing
+├── shared/                     # Common code and assets shared between services
 ├── .env                        # Environment variable definitions
 ├── Makefile                    # Automation commands for building and running services
 └── docker-compose.yml          # Docker Compose configuration for orchestrating containers
