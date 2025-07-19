@@ -10,9 +10,10 @@
 #
 #!/bin/bash
 
-.PHONY: start stop down restart build rebuild
+.PHONY: start stop down restart build build-common-lib rebuild
 
 start:
+	@$(MAKE) build-common-lib
 	docker-compose -f docker-compose.yml up -d --build
 
 stop:
@@ -22,10 +23,15 @@ down:
 	docker-compose -f docker-compose.yml down
 
 restart:
-	make stop && make start
+	$(MAKE) stop
+	$(MAKE) start
 
 build:
+	@$(MAKE) build-common-lib
 	docker-compose build --no-cache
+
+build-common-lib:
+	wsl ./infrastructure/scripts/compile-common-lib.sh
 
 rebuild:
 	docker-compose build ${SERVICE}
