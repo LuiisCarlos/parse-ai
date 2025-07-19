@@ -9,11 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import dev.luisworks.parse_ai.dto.DocumentResponse;
+import dev.luisworks.parse_ai.service.DocumentService;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/documents")
 public class DocumentController {
+
+    private final DocumentService documentService;
 
     @GetMapping
     public ResponseEntity<String> getAll(Pageable pageable) {
@@ -32,9 +39,10 @@ public class DocumentController {
     }
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<String> upload(MultipartFile multiparFile) {
+    public ResponseEntity<DocumentResponse> upload(MultipartFile multiparFile) {
+        DocumentResponse response = documentService.upload(null);
 
-        return null;
+        return ResponseEntity.ok(response);
     }
 
 }
