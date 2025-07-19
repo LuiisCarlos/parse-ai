@@ -13,10 +13,12 @@ services:
       - "8888:8888"
     networks:
       - net
-    environment:
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-
   eureka-server:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     container_name: eureka-server
     build:
       context: ./services/eureka-server
@@ -31,6 +33,25 @@ services:
     environment:
       - SPRING_APPLICATION_NAME=eureka-server
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+
+  document-service:
+    container_name: document-service
+    build:
+      context: ./services/document-service
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - net
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_APPLICATION_NAME=document-service
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-server:8761/eureka"}}}}}
 
 networks:
   net:

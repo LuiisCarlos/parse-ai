@@ -1,0 +1,12 @@
+server:
+  port: 8090
+
+eureka:
+  instance:
+    preferIpAddress: false
+    hostname: document-service
+    nonSecurePort: 8090
+
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
