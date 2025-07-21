@@ -13,3 +13,17 @@ eureka:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
+
+  kafka:
+    bootstrap-servers: kafka-server:8889
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      vlue-serializer: org.apache.kafka.support.serializer.JsonSerializer
+      
+    consumer:
+      group-id: document-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"

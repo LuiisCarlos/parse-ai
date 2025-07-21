@@ -1,4 +1,5 @@
 services:
+
   config-server:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
@@ -14,6 +15,26 @@ services:
     networks:
       - net
 
+  kafka-server:
+    container_name: kafka-server
+    image: bitnami/kafka:latest
+    ports:
+      - "8889:8889"
+    environment:
+      KAFKA_ENABLE_KRAFT: "yes"
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:8889,CONTROLLER://:8890
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server:8889
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-server:8890
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+    volumes:
+      - ./infrastructure/scripts:/scripts
+    networks:
+      - net
+
   eureka-server:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
@@ -26,11 +47,11 @@ services:
       dockerfile: services/eureka-server/Dockerfile
     ports:
       - "8761:8761"
-    networks:
-      - net
     depends_on:
       config-server:
         condition: service_healthy
+    networks:
+      - net
 
   gateway-service:
     container_name: gateway-service
@@ -39,13 +60,13 @@ services:
       dockerfile: services/gateway-service/Dockerfile
     ports:
       - "8090:8090"
-    networks:
-      - net
     depends_on:
       eureka-server:
         condition: service_healthy
       config-server:
         condition: service_healthy
+    networks:
+      - net
 
   document-service:
     container_name: document-service
@@ -54,17 +75,19 @@ services:
       dockerfile: services/document-service/Dockerfile
     ports:
       - "8091:8091"
-    networks:
-      - net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-database:5432/parse_ai_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     depends_on:
       eureka-server:
         condition: service_healthy
       config-server:
         condition: service_healthy
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-database:5432/parse_ai_db
-      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      kafka-server:
+        condition: service_started
+    networks:
+      - net
 
   storage-service:
     container_name: storage-service
@@ -73,17 +96,17 @@ services:
       dockerfile: services/storage-service/Dockerfile
     ports:
       - "8092:8092"
-    networks:
-      - net
+    environment:
+      CLOUDINARY_NAME: ${CLOUDINARY_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
     depends_on:
       eureka-server:
         condition: service_healthy
       config-server:
         condition: service_healthy
-    environment:
-      - CLOUDINARY_NAME=${CLOUDINARY_NAME}
-      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
-      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+    networks:
+      - net
 
   postgres-database:
     container_name: postgres-database
