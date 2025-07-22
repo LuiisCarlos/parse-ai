@@ -2,12 +2,18 @@
 
 BROKER="kafka-server:8889"
 TOPICS=(
-  "process-document"
+  "document.uploaded"
+  "document.storage.completed"
+  "document.ocr.ready"
+  "document.ocr.completed"
+  "document.ai.ready"
+  "document.ai.completed"
+  "document.errors"
 )
 
 sleep 5
 
-echo "[SCRIPTS] - Creating topics on broker $BROKER..."
+echo "[SCRIPTS] - Creating topics on broker $BROKER"
 
 for topic in "${TOPICS[@]}"; do
   echo "[SCRIPTS] - Creating kafka topic: $topic"

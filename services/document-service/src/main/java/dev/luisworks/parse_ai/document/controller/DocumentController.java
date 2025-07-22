@@ -1,4 +1,4 @@
-package dev.luisworks.parse_ai.controller;
+package dev.luisworks.parse_ai.document.controller;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import dev.luisworks.parse_ai.dto.DocumentResponse;
-import dev.luisworks.parse_ai.service.DocumentService;
+import dev.luisworks.parse_ai.document.dto.DocumentResponse;
+import dev.luisworks.parse_ai.document.service.DocumentService;
 
 import lombok.RequiredArgsConstructor;
 

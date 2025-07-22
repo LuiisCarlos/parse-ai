@@ -1,10 +1,10 @@
-package dev.luisworks.parse_ai.dto;
+package dev.luisworks.parse_ai.document.dto;
 
 import java.time.Instant;
 import java.util.Set;
 import java.util.Map;
 
-import dev.luisworks.parse_ai.model.DocumentStatus;
+import dev.luisworks.parse_ai.document.model.DocumentStatus;
 
 import lombok.Builder;
 import lombok.Getter;

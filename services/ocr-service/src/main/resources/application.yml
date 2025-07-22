@@ -1,0 +1,10 @@
+server:
+  port: 8093
+
+spring:
+  application:
+    name: ocr-service
+
+  config:
+    import: optional:configserver:http://config-server:8888
+

@@ -1,4 +1,4 @@
-package dev.luisworks.parse_ai.service.impl;
+package dev.luisworks.parse_ai.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,8 +6,6 @@ import java.nio.file.Path;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import dev.luisworks.parse_ai.service.OcrService;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -105,18 +105,54 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
+      kafka-server:
+        condition: service_started
+    networks:
+      - net
+
+  ocr-service:
+    container_name: ocr-service
+    build:
+      context: .
+      dockerfile: services/ocr-service/Dockerfile
+    ports:
+      - "8093:8093"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      kafka-server:
+        condition: service_started
+    networks:
+      - net
+
+  ai-service:
+    container_name: ai-service
+    build:
+      context: .
+      dockerfile: services/ai-service/Dockerfile
+    ports:
+      - "8094:8094"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      kafka-server:
+        condition: service_started
     networks:
       - net
 
   postgres-database:
     container_name: postgres-database
     image: postgres:latest
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: parse_ai_db
-    ports:
-      - "5432:5432"
     networks:
       - net
 
