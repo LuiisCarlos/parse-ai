@@ -60,6 +60,8 @@ services:
       dockerfile: services/gateway-service/Dockerfile
     ports:
       - "8090:8090"
+    environment:
+      LOGGING_LEVEL_ROOT: ${LOGGING_LEVEL}
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -79,6 +81,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-database:5432/parse_ai_db
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      LOGGING_LEVEL_ROOT: ${LOGGING_LEVEL}
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -100,6 +103,7 @@ services:
       CLOUDINARY_NAME: ${CLOUDINARY_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      LOGGING_LEVEL_ROOT: ${LOGGING_LEVEL}
     depends_on:
       eureka-server:
         condition: service_healthy

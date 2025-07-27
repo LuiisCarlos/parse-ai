@@ -122,6 +122,7 @@ Health endpoints are available at:
 │   ├── eureka-server/          # Service registry for microservices discovery
 │   ├── gateway-service/        # API gateway for routing and security
 │   ├── storage-service/        # File storage management using Cloudinary
+│   ├── ocr-service/            # Optical Character Recognition service for extracting text from images
 │   └── ai-service/             # AI-powered document analysis and processing
 ├── shared/                     # Common code and assets shared between services
 ├── .env                        # Environment variable definitions

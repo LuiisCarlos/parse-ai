@@ -17,7 +17,7 @@ KAFKA_CONTAINTER=kafka-server
 
 .PHONY: start stop down restart build build-common-lib rebuild fix-scripts create-topics
 
-start: fix-scripts build-common-lib
+start: build-common-lib
 	docker-compose -f docker-compose.yml up -d --build
 	$(MAKE) create-topics
 
