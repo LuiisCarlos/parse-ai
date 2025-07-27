@@ -2,13 +2,15 @@
 
 BROKER="kafka-server:8889"
 TOPICS=(
-  "document.uploaded"
+  "document.storage.request"
   "document.storage.completed"
-  "document.ocr.ready"
+  "document.storage.failed"
+  "document.ocr.request"
   "document.ocr.completed"
-  "document.ai.ready"
+  "document.ocr.failed"
+  "document.ai.request"
   "document.ai.completed"
-  "document.errors"
+  "document.ai.failed"
 )
 
 sleep 5

@@ -10,7 +10,7 @@ LIBS_DIR="$PROJECT_ROOT/libs"
 
 echo "[SCRIPTS] - Building common-lib"
 cd "$SHARED_UTILS_DIR"
-mvn clean package
+mvn clean package -DskipTests
 
 echo "[SCRIPTS] - Copying JAR to libs folder"
 mkdir -p "$LIBS_DIR"
