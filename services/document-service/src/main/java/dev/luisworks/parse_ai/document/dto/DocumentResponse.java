@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.Map;
 
-import dev.luisworks.parse_ai.document.model.DocumentStatus;
+// import dev.luisworks.parse_ai.document.model.DocumentStatus;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,19 +13,29 @@ import lombok.Getter;
 @Builder
 public class DocumentResponse {
 
-    private DocumentStatus status;
+    // private DocumentStatus status;
+
     private String documentId;
+
     private String originalFilename;
+
     private Set<String> tags;
+
     private DocumentAnalysis analysis;
-    private Map<String, Object> metadata;
-    private Instant processedAt;
+
+    private Map<String, String> metadata;
+
+    @Builder.Default
+    private Instant processedAt = Instant.now();
 
     @Getter
     @Builder
     public static class DocumentAnalysis {
+
         private String summary;
+
         private Map<String, String> keyData;
+
     }
 
 }

@@ -11,11 +11,27 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum DocumentStatus implements JsonValuedEnum {
 
-    PROCESSING("Processing"),
+    UPLOADED("Uploaded"),
 
-    SUCCESS("Success"),
+    STORAGE_IN_PROGRESS("Storage in progress"),
 
-    FAILED("Failed");
+    STORAGE_COMPLETED("Storage completed"),
+
+    STORAGE_FAILED("Storage failed"),
+
+    OCR_IN_PROGRESS("OCR in progress"),
+
+    OCR_COMPLETED("OCR completed"),
+
+    OCR_FAILED("OCR failed"),
+
+    AI_IN_PROGRESS("AI in progress"),
+
+    AI_COMPLETED("AI completed"),
+
+    AI_FAILED("AI failed"),
+
+    COMPLETED("Completed"),;
 
     private String value;
 

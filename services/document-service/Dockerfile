@@ -6,9 +6,15 @@ WORKDIR /app
 COPY services/document-service/ /app/
 
 # Copy common lib JAR into libs folder inside the build context
-COPY libs/common-lib-1.0.0.jar libs/common-lib-1.0.0.jar
+COPY libs/common-lib-1.0.0.jar /tmp/common-lib-1.0.0.jar
+RUN mvn install:install-file \
+    -Dfile=/tmp/common-lib-1.0.0.jar \
+    -DgroupId=dev.luisworks \
+    -DartifactId=common-lib \
+    -Dversion=1.0.0 \
+    -Dpackaging=jar
 
-RUN mvn clean package -Pdocker-build -DskipTests
+RUN mvn clean package -DskipTests
 
 # Runtime image
 FROM eclipse-temurin:21

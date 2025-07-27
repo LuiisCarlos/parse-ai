@@ -72,6 +72,11 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>dev.luisworks</groupId>
+            <artifactId>common-lib</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -85,35 +90,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <profiles>
-        <profile>
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>dev.luisworks</groupId>
-                    <artifactId>common-lib</artifactId>
-                    <version>1.0.0</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>docker-build</id>
-            <dependencies>
-                <dependency>
-                    <groupId>dev.luisworks</groupId>
-                    <artifactId>common-lib</artifactId>
-                    <version>1.0.0</version>
-                    <scope>system</scope>
-                    <systemPath>${project.basedir}/libs/common-lib-1.0.0.jar</systemPath>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 
     <build>
         <plugins>
